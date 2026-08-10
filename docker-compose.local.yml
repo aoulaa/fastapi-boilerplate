@@ -1,0 +1,24 @@
+# Local overrides: publish ports to the host and hot-reload the source tree.
+# Applied by `make up` — never by `make up-prod`.
+services:
+  app:
+    command: ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./migrations:/app/migrations
+      - ./scripts:/app/scripts
+
+  worker:
+    volumes:
+      - ./app:/app/app
+      - ./scripts:/app/scripts
+
+  db:
+    ports:
+      - "5432:5432"
+
+  redis:
+    ports:
+      - "6379:6379"

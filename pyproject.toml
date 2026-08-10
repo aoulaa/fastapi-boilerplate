@@ -1,0 +1,94 @@
+[project]
+name = "fastapi-boilerplate"
+version = "0.1.0"
+description = "Modular async FastAPI backend boilerplate"
+authors = [{ name = "Olimbek Nizomov", email = "olimbek.nizomov95@gmail.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.11, <3.14"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+    "uvloop>=0.19.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "sqlalchemy>=2.0.31",
+    "alembic>=1.13.2",
+    "asyncpg>=0.29.0",
+    "greenlet>=3.0.0",
+    "pyjwt>=2.9.0",
+    "redis>=5.0.8",
+    "httpx>=0.27.0",
+    "python-multipart>=0.0.9",
+    "sentry-sdk[fastapi]>=2.13.0",
+    "arq>=0.28.0",
+    "babel>=2.18.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.2",
+    "pytest-asyncio>=0.23.8",
+    "pytest-mock>=3.14.0",
+    "faker>=26.0.0",
+    "mypy>=1.16.0",
+    "ruff>=0.6.0",
+    "pre-commit>=4.3.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = [
+    "F",  # Pyflakes
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "C",  # complexity & comprehensions
+    "UP", # pyupgrade
+    "I",  # isort
+]
+ignore = [
+    "E402",  # module level import not at top of file
+    "UP006", # use-pep585-annotation
+    "UP007", # use-pep604-annotation
+    "E741",  # ambiguous variable name
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+"migrations/versions/*.py" = ["E501"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 24
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_test_loop_scope = "session"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+mypy_path = "."
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = "app.*"
+disallow_untyped_defs = true
